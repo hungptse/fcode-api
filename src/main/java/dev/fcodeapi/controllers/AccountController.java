@@ -9,10 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -33,10 +36,11 @@ public class AccountController {
     @Autowired
     private RoleRepository rr;
 
+    @PostAuthorize("hasRole('ADMIN') OR (returnObject.studentId == authentication.name)")
     @GetMapping("{id}")
-    public Optional<AccountEntity> find(@PathVariable String id)
+    public AccountEntity find(@PathVariable String id)
     {
-        return ar.findById(id);
+        return ar.findByStudentId(id);
     }
 
     @GetMapping("name/{search}")
@@ -45,6 +49,7 @@ public class AccountController {
         return ar.findByNameContaining(search);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public List<AccountEntity> findAllAccount()
     {

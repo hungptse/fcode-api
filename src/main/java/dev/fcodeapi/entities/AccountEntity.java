@@ -2,14 +2,18 @@ package dev.fcodeapi.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
 @Table(name = "Account", schema = "dbo", catalog = "Fcode")
-public class AccountEntity {
+@JsonIgnoreProperties({"password"})
+public class AccountEntity{
     private String email;
     private String password;
     private String name;
@@ -224,6 +228,7 @@ public class AccountEntity {
 //    public void setAccountEventsByStudentId(Collection<AccountEventEntity> accountEventsByStudentId) {
 //        this.accountEventsByStudentId = accountEventsByStudentId;
 //    }
+
 
 
 }

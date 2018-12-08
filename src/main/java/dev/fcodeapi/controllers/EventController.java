@@ -37,6 +37,12 @@ public class EventController {
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity updateEvent(@RequestBody Map<String,String> body)
+    {
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
     @GetMapping("publish")
     public List<EventEntity> publishEvent()
     {
