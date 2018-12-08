@@ -11,11 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
+
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.RolesAllowed;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -36,7 +34,7 @@ public class AccountController {
     @Autowired
     private RoleRepository rr;
 
-    @PostAuthorize("hasRole('ADMIN') OR (returnObject.studentId == authentication.name)")
+    @PostAuthorize("(returnObject.studentId == authentication.name)")
     @GetMapping("{id}")
     public AccountEntity find(@PathVariable String id)
     {
@@ -49,7 +47,7 @@ public class AccountController {
         return ar.findByNameContaining(search);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
     public List<AccountEntity> findAllAccount()
     {

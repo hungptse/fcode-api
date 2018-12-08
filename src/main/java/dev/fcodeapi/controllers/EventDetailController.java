@@ -31,7 +31,6 @@ public class EventDetailController {
 
     @GetMapping("{detail}")
     public EventDetailEntity getAttendanceByEventDetail(@PathVariable String detail){
-        System.out.println(detail);
         return edr.findByEventDetail(Integer.parseInt(detail));
     }
 

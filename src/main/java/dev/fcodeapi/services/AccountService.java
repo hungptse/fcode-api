@@ -23,8 +23,6 @@ public class AccountService implements UserDetailsService {
     @Autowired
     private AccountRepository ar;
 
-    @Autowired
-    private RoleRepository rr;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -32,9 +30,9 @@ public class AccountService implements UserDetailsService {
         if (ae == null){
             throw new UsernameNotFoundException(username);
         }
-        List<GrantedAuthority> list = new ArrayList<>();
+        List<GrantedAuthority> grantedAuthorities  = new ArrayList<>();
         GrantedAuthority ga = new SimpleGrantedAuthority("ROLE_" + ae.getRole().getRoleName());
-        list.add(ga);
-        return new User(ae.getStudentId(),ae.getPassword(), list);
+        grantedAuthorities.add(ga);
+        return new User(ae.getStudentId(),ae.getPassword(), grantedAuthorities);
     }
 }
