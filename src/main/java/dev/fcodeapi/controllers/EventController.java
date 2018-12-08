@@ -1,6 +1,10 @@
 package dev.fcodeapi.controllers;
 
+import dev.fcodeapi.entities.AccountEntity;
+import dev.fcodeapi.entities.AccountEventEntity;
 import dev.fcodeapi.entities.EventEntity;
+import dev.fcodeapi.repositories.AccountEventRepository;
+import dev.fcodeapi.repositories.AccountRepository;
 import dev.fcodeapi.repositories.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +21,12 @@ public class EventController {
 
     @Autowired
     private EventRepository er;
+
+    @Autowired
+    private AccountRepository ar;
+
+    @Autowired
+    private AccountEventRepository aer;
 
     @GetMapping
     public List<EventEntity> getAll()
@@ -48,6 +58,67 @@ public class EventController {
     {
         return er.findAllByPublishIsTrue();
     }
+
+
+    @PostMapping("{event}/{studentId}")
+    public ResponseEntity joinEvent(@PathVariable String event, @PathVariable String studentId)
+    {
+        AccountEntity ae = ar.findByStudentId(studentId);
+        EventEntity ee = er.getOne(Integer.parseInt(event));
+
+        AccountEventEntity aee = aer.findByEvent_EventIdAndAccount_StudentId(Integer.parseInt(event), studentId);
+        if (aee == null)
+        {
+            AccountEventEntity newAee = new AccountEventEntity();
+            newAee.setAccount(ae);
+            newAee.setEvent(ee);
+            aer.save(newAee);
+            return new ResponseEntity(HttpStatus.CREATED);
+        }
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("pending/{event}")
+    public List<AccountEventEntity> getPendingList(@PathVariable String event)
+    {
+        return aer.findAllByEvent_EventIdAndStatusIsNull(Integer.parseInt(event));
+    }
+
+    @PutMapping("approve/{event}/{studentId}")
+    public ResponseEntity approveJoin(@PathVariable String event, @PathVariable String studentId)
+    {
+        AccountEntity ae = ar.findByStudentId(studentId);
+        EventEntity ee = er.getOne(Integer.parseInt(event));
+
+        AccountEventEntity aee = aer.findByEvent_EventIdAndAccount_StudentId(Integer.parseInt(event), studentId);
+        if (aee != null)
+        {
+            aee.setStatus(true);
+            aer.save(aee);
+            return new ResponseEntity(HttpStatus.ACCEPTED);
+        }
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping("reject/{event}/{studentId}")
+    public ResponseEntity rejectJoin(@PathVariable String event, @PathVariable String studentId)
+    {
+        AccountEntity ae = ar.findByStudentId(studentId);
+        EventEntity ee = er.getOne(Integer.parseInt(event));
+
+        AccountEventEntity aee = aer.findByEvent_EventIdAndAccount_StudentId(Integer.parseInt(event), studentId);
+        if (aee != null)
+        {
+            aee.setStatus(false);
+            aer.save(aee);
+            return new ResponseEntity(HttpStatus.ACCEPTED);
+        }
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+
 
 
 }

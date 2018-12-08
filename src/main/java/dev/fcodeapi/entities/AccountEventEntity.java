@@ -8,8 +8,8 @@ import java.util.Objects;
 public class AccountEventEntity {
     private Boolean status;
     private int accountEvent;
-    private EventEntity eventByEventId;
-//    private AccountEntity accountByStudentId;
+    private EventEntity event;
+    private AccountEntity account;
 
     @Basic
     @Column(name = "Status")
@@ -23,6 +23,7 @@ public class AccountEventEntity {
 
     @Id
     @Column(name = "AccountEvent")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     public int getAccountEvent() {
         return accountEvent;
     }
@@ -47,21 +48,21 @@ public class AccountEventEntity {
 
     @ManyToOne
     @JoinColumn(name = "EventId", referencedColumnName = "EventId", nullable = false)
-    public EventEntity getEventByEventId() {
-        return eventByEventId;
+    public EventEntity getEvent() {
+        return event;
     }
 
-    public void setEventByEventId(EventEntity eventByEventId) {
-        this.eventByEventId = eventByEventId;
+    public void setEvent(EventEntity event) {
+        this.event = event;
     }
 
-//    @ManyToOne
-//    @JoinColumn(name = "StudentID", referencedColumnName = "StudentID", nullable = false)
-//    public AccountEntity getAccountByStudentId() {
-//        return accountByStudentId;
-//    }
-//
-//    public void setAccountByStudentId(AccountEntity accountByStudentId) {
-//        this.accountByStudentId = accountByStudentId;
-//    }
+    @ManyToOne
+    @JoinColumn(name = "StudentID", referencedColumnName = "StudentID", nullable = false)
+    public AccountEntity getAccount() {
+        return account;
+    }
+
+    public void setAccount(AccountEntity account) {
+        this.account = account;
+    }
 }

@@ -1,11 +1,15 @@
 package dev.fcodeapi.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
 @Table(name = "Event", schema = "dbo", catalog = "Fcode")
+@JsonIgnoreProperties({"eventDetailsByEventId"})
 public class EventEntity {
     private int eventId;
     private String eventName;
@@ -20,7 +24,8 @@ public class EventEntity {
     private Boolean isPublish;
 //    private Collection<AccountEventEntity> accountEventsByEventId;
     private EventTypeEntity type;
-//    private Collection<EventDetailEntity> eventDetailsByEventId;
+//    private Collection<EventDetailEntity> listDetail;
+    private Collection<EventDetailEntity> eventDetailsByEventId;
 
     @Id
     @Column(name = "EventId")
@@ -102,8 +107,6 @@ public class EventEntity {
         this.dateCreated = dateCreated;
     }
 
-
-
     @Basic
     @Column(name = "isSign")
     public Boolean getSign() {
@@ -175,14 +178,24 @@ public class EventEntity {
     public void setType(EventTypeEntity type) {
         this.type = type;
     }
+
 //
 //
 //    @OneToMany(mappedBy = "eventByEventId")
-//    public Collection<EventDetailEntity> getEventDetailsByEventId() {
-//        return eventDetailsByEventId;
+//    public Collection<EventDetailEntity> getListDetail() {
+//        return listDetail;
 //    }
 //
-//    public void setEventDetailsByEventId(Collection<EventDetailEntity> eventDetailsByEventId) {
-//        this.eventDetailsByEventId = eventDetailsByEventId;
+//    public void setListDetail(Collection<EventDetailEntity> listDetail) {
+//        this.listDetail = listDetail;
 //    }
+
+    @OneToMany(mappedBy = "eventByEventId", fetch = FetchType.EAGER)
+    public Collection<EventDetailEntity> getEventDetailsByEventId() {
+        return eventDetailsByEventId;
+    }
+
+    public void setEventDetailsByEventId(Collection<EventDetailEntity> eventDetailsByEventId) {
+        this.eventDetailsByEventId = eventDetailsByEventId;
+    }
 }

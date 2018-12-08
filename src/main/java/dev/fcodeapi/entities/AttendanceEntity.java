@@ -1,10 +1,13 @@
 package dev.fcodeapi.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "Attendance", schema = "dbo", catalog = "Fcode")
+@JsonIgnoreProperties("eventDetailByEventDetail")
 public class AttendanceEntity {
     private int attendanceId;
     private Boolean isPresent;
@@ -13,6 +16,7 @@ public class AttendanceEntity {
     private EventDetailEntity eventDetailByEventDetail;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "AttendanceId")
     public int getAttendanceId() {
         return attendanceId;
