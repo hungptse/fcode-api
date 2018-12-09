@@ -47,9 +47,11 @@ public class EventDetailController {
         edr.saveAndFlush(ede);
 
         List<AccountEventEntity> listAccountEvent = aer.findAllByEvent_EventId(Integer.parseInt(event));
-                List<AccountEntity> listAccount = new ArrayList<>();
+        List<AccountEntity> listAccount = new ArrayList<>();
         for (AccountEventEntity accountEvent :listAccountEvent) {
-            listAccount.add(accountEvent.getAccount());
+            if (accountEvent.getStatus() != null) {
+                listAccount.add(accountEvent.getAccount());
+            }
         }
         for (int i = 0; i < listAccount.size(); i++) {
             AttendanceEntity ae = new AttendanceEntity();
