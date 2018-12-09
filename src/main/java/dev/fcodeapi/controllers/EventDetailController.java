@@ -44,8 +44,6 @@ public class EventDetailController {
         ede.setDateEvent(Timestamp.valueOf(date));
         ede.setDetailName(name);
         ede.setEventByEventId(ee);
-        edr.saveAndFlush(ede);
-
         List<AccountEventEntity> listAccountEvent = aer.findAllByEvent_EventId(Integer.parseInt(event));
         List<AccountEntity> listAccount = new ArrayList<>();
         for (AccountEventEntity accountEvent :listAccountEvent) {
@@ -53,14 +51,21 @@ public class EventDetailController {
                 listAccount.add(accountEvent.getAccount());
             }
         }
-        for (int i = 0; i < listAccount.size(); i++) {
-            AttendanceEntity ae = new AttendanceEntity();
-            ae.setNote("");
-            ae.setStudentId(listAccount.get(i).getStudentId());
-            ae.setEventDetailByEventDetail(ede);
-            ae.setPresent(false);
-            ar.save(ae);
+        if (!listAccount.isEmpty())
+        {
+            edr.saveAndFlush(ede);
+            for (int i = 0; i < listAccount.size(); i++) {
+                AttendanceEntity ae = new AttendanceEntity();
+                ae.setNote("");
+                ae.setStudentId(listAccount.get(i).getStudentId());
+                ae.setEventDetailByEventDetail(ede);
+                ae.setPresent(false);
+                ar.save(ae);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
+
         return new ResponseEntity(HttpStatus.CREATED);
     }
 }
