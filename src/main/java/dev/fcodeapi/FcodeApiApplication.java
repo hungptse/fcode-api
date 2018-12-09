@@ -29,7 +29,7 @@ public class FcodeApiApplication {
                         .allowCredentials(false)
                         .allowedHeaders("Authorization","Content-Type","Access-Control-Allow-Origin")
                         .allowedHeaders("*")
-                        .exposedHeaders("Access-Control-Allow-Headers", "Authorization","Content-Type","Access-Control-Allow-Origin");
+                        .exposedHeaders("Access-Control-Allow-Headers", "Authorization","Content-Type","Access-Control-Allow-Origin ");
 
             }
         };

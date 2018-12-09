@@ -79,9 +79,14 @@ public class EventController {
     }
 
     @GetMapping("pending/{event}")
-    public List<AccountEventEntity> getPendingList(@PathVariable String event)
+    public ResponseEntity getPendingList(@PathVariable String event)
     {
-        return aer.findAllByEvent_EventIdAndStatusIsNull(Integer.parseInt(event));
+        List<AccountEventEntity> list = aer.findAllByEvent_EventIdAndStatusIsNull(Integer.parseInt(event));
+        if (list.size() == 0)
+        {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(list, HttpStatus.OK);
     }
 
     @PutMapping("approve/{event}/{studentId}")
