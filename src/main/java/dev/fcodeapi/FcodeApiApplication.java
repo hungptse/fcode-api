@@ -26,8 +26,9 @@ public class FcodeApiApplication {
                 registry.addMapping("/**")
                         .allowedOrigins("*")
                         .allowedMethods("*")
-                        .allowCredentials(true)
+                        .allowCredentials(false)
                         .allowedHeaders("Authorization","Content-Type","Access-Control-Allow-Origin")
+                        .allowedHeaders("*")
                         .exposedHeaders("Access-Control-Allow-Headers", "Authorization","Content-Type");
 
             }
