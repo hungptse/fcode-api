@@ -31,7 +31,7 @@ public class AccountService implements UserDetailsService {
             throw new UsernameNotFoundException(username);
         }
         List<GrantedAuthority> grantedAuthorities  = new ArrayList<>();
-        GrantedAuthority ga = new SimpleGrantedAuthority("ROLE_" + ae.getRole().getRoleName());
+        GrantedAuthority ga = new SimpleGrantedAuthority(ae.getRole().getRoleName());
         grantedAuthorities.add(ga);
         return new User(ae.getStudentId(),ae.getPassword(), grantedAuthorities);
     }

@@ -47,7 +47,7 @@ public class AccountController {
         return ar.findByNameContaining(search);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public List<AccountEntity> findAllAccount()
     {
