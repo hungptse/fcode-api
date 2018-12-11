@@ -11,9 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/event")
@@ -27,6 +25,11 @@ public class EventController {
 
     @Autowired
     private AccountEventRepository aer;
+
+    @GetMapping("type/{type}")
+    public List<EventEntity> getEventByType(@PathVariable int type){
+        return er.findAllByType_TypeId(type);
+    }
 
     @GetMapping
     public List<EventEntity> getAll()
@@ -48,7 +51,7 @@ public class EventController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity updateEvent(@RequestBody Map<String,String> body)
+    public ResponseEntity updateEvent(@RequestBody Map<String,String> body, @PathVariable String id)
     {
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
@@ -81,12 +84,19 @@ public class EventController {
     @GetMapping("pending/{event}")
     public ResponseEntity getPendingList(@PathVariable String event)
     {
-        List<AccountEventEntity> list = aer.findAllByEvent_EventIdAndStatusIsNull(Integer.parseInt(event));
-        if (list.size() == 0)
+        Map<String, Object> map = new HashMap<>();
+        List<AccountEventEntity> listAccountEvent = aer.findAllByEvent_EventIdAndStatusIsNull(Integer.parseInt(event));
+        List<AccountEntity> listAccount = new ArrayList<>();
+        if (listAccountEvent.size() == 0)
         {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(list, HttpStatus.OK);
+        for (AccountEventEntity aee : listAccountEvent) {
+            listAccount.add(aee.getAccount());
+        }
+        map.put("account",listAccountEvent);
+        map.put("event", getEventByType(3));
+        return new ResponseEntity(map, HttpStatus.OK);
     }
 
     @PutMapping("approve/{event}/{studentId}")

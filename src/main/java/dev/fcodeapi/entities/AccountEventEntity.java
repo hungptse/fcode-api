@@ -1,10 +1,13 @@
 package dev.fcodeapi.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "AccountEvent", schema = "dbo", catalog = "Fcode")
+@JsonIgnoreProperties({"event"})
 public class AccountEventEntity {
     private Boolean status;
     private int accountEvent;
