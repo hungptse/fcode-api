@@ -99,41 +99,44 @@ public class EventController {
         return new ResponseEntity(map, HttpStatus.OK);
     }
 
-    @PutMapping("approve/{event}/{studentId}")
-    public ResponseEntity approveJoin(@PathVariable String event, @PathVariable String studentId)
+    @PutMapping("approve/{accountEventId}")
+    public ResponseEntity approveJoin(@PathVariable int accountEventId, @RequestBody Map<String,List> body)
     {
-        AccountEntity ae = ar.findByStudentId(studentId);
-        EventEntity ee = er.getOne(Integer.parseInt(event));
-
-        AccountEventEntity aee = aer.findByEvent_EventIdAndAccount_StudentId(Integer.parseInt(event), studentId);
+//        AccountEntity ae = ar.findByStudentId(studentId);
+//        EventEntity ee = er.getOne(Integer.parseInt(event));
+        List<Integer> listEventId = body.get("listEvent");
+        AccountEventEntity aee = aer.findByAccountEvent(accountEventId);
         if (aee != null)
         {
             aee.setStatus(true);
+            for (Integer id : listEventId) {
+                System.out.println(id);
+                AccountEventEntity accountEvent = new AccountEventEntity();
+                accountEvent.setStatus(true);
+                accountEvent.setEvent(er.findByEventId(id));
+                accountEvent.setAccount(aee.getAccount());
+                aer.save(accountEvent);
+            }
             aer.save(aee);
             return new ResponseEntity(HttpStatus.ACCEPTED);
         }
-
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping("reject/{event}/{studentId}")
-    public ResponseEntity rejectJoin(@PathVariable String event, @PathVariable String studentId)
-    {
-        AccountEntity ae = ar.findByStudentId(studentId);
-        EventEntity ee = er.getOne(Integer.parseInt(event));
 
-        AccountEventEntity aee = aer.findByEvent_EventIdAndAccount_StudentId(Integer.parseInt(event), studentId);
+
+    @PutMapping("reject/{accountEventId}")
+    public ResponseEntity rejectJoin(@PathVariable String accountEventId)
+    {
+        AccountEventEntity aee = aer.findByAccountEvent(Integer.parseInt(accountEventId));
         if (aee != null)
         {
             aee.setStatus(false);
             aer.save(aee);
             return new ResponseEntity(HttpStatus.ACCEPTED);
         }
-
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
-
-
 
 
 }

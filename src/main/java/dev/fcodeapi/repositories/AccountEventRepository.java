@@ -12,5 +12,6 @@ public interface AccountEventRepository extends JpaRepository<AccountEventEntity
     AccountEventEntity findByEvent_EventIdAndAccount_StudentId(int event, String studentId);
     List<AccountEventEntity> findAllByEvent_EventIdAndStatusIsNull(int event);
     List<AccountEventEntity> findAllByEvent_EventId(int event);
+    AccountEventEntity findByAccountEvent(int accountEvent);
 
 }
