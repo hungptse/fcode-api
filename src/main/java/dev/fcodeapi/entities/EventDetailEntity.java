@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "EventDetail", schema = "dbo", catalog = "Fcode")
-@JsonIgnoreProperties({"eventByEventId"})
+@JsonIgnoreProperties({"eventByEventId","attendanceList"})
 public class EventDetailEntity {
 
     private int eventDetail;

@@ -93,7 +93,7 @@ public class EventController {
         }
         for (AccountEventEntity aee : listAccountEvent) {
             listAccount.add(aee.getAccount());
-        }
+        }   
         map.put("account",listAccountEvent);
         map.put("event", getEventByType(3));
         return new ResponseEntity(map, HttpStatus.OK);

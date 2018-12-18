@@ -34,6 +34,17 @@ public class EventDetailController {
         return edr.findByEventDetail(Integer.parseInt(detail));
     }
 
+    @GetMapping("all/{event}")
+    public ResponseEntity getListDetailByEventId(@PathVariable String event)
+    {
+        List<EventDetailEntity> list = (List<EventDetailEntity>) er.findByEventId(Integer.parseInt(event)).getEventDetailsByEventId();
+        if (list.isEmpty())
+        {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(list, HttpStatus.OK);
+    }
+
     @PostMapping("{event}")
     public ResponseEntity createDetail(@RequestBody Map<String,String> body, @PathVariable String event)
     {
