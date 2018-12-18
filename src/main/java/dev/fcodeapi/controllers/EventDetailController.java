@@ -30,8 +30,8 @@ public class EventDetailController {
     private AttendanceRepository ar;
 
     @GetMapping("{detail}")
-    public EventDetailEntity getAttendanceByEventDetail(@PathVariable String detail){
-        return edr.findByEventDetail(Integer.parseInt(detail));
+    public Collection<AttendanceEntity> getAttendanceByEventDetail(@PathVariable String detail){
+        return edr.findByEventDetail(Integer.parseInt(detail)).getAttendanceList();
     }
 
     @GetMapping("all/{event}")
