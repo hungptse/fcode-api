@@ -9,11 +9,13 @@ import dev.fcodeapi.repositories.AttendanceRepository;
 import dev.fcodeapi.repositories.EventDetailRepository;
 import dev.fcodeapi.repositories.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("attendance")
@@ -50,4 +52,22 @@ public class AttendanceController {
         return ar.findAll();
     }
 
+
+    @PutMapping("/take")
+    public ResponseEntity takeAttendance(@RequestBody List<Map<String,String>> body){
+        if (!body.isEmpty())
+        {
+            for (Map<String,String> attendanceFromClient: body) {
+             AttendanceEntity ae = new AttendanceEntity();
+             ae.setAttendanceId(Integer.parseInt(attendanceFromClient.get("attendanceId")));
+             ae.setNote(attendanceFromClient.get("note"));
+             ae.setPresent(Boolean.parseBoolean(attendanceFromClient.get("present")));
+             ar.save(ae);
+            }
+            return new ResponseEntity(HttpStatus.OK);
+        }
+
+
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
 }

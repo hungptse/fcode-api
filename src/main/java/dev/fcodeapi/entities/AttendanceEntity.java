@@ -8,6 +8,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "Attendance", schema = "dbo", catalog = "Fcode")
 @JsonIgnoreProperties("eventDetailByEventDetail")
+
 public class AttendanceEntity {
     private int attendanceId;
     private Boolean isPresent;
@@ -47,7 +48,7 @@ public class AttendanceEntity {
     }
 
     @Basic
-    @Column(name = "StudentID")
+    @Column(name = "StudentID", updatable = false)
     public String getStudentId() {
         return studentId;
     }
@@ -73,7 +74,7 @@ public class AttendanceEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "EventDetail", referencedColumnName = "EventDetail")
+    @JoinColumn(name = "EventDetail", referencedColumnName = "EventDetail", updatable = false)
     public EventDetailEntity getEventDetailByEventDetail() {
         return eventDetailByEventDetail;
     }
