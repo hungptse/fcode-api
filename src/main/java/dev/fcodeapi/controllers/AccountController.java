@@ -34,11 +34,26 @@ public class AccountController {
     @Autowired
     private RoleRepository rr;
 
-    @PostAuthorize("(returnObject.studentId == authentication.name)")
+//    @PostAuthorize("(returnObject.studentId == authentication.name)")
     @GetMapping("{id}")
-    public AccountEntity find(@PathVariable String id)
+    public ResponseEntity find(@PathVariable String id)
     {
-        return ar.findByStudentId(id);
+        AccountEntity accountEntity = ar.findByStudentId(id);
+        Map<String,Object> ae = new HashMap<>();
+        ae.put("email",accountEntity.getEmail());
+        ae.put("name",accountEntity.getName());
+        ae.put("gender",accountEntity.isGender());
+        ae.put("phone",accountEntity.getPhone());
+        ae.put("dayOfBirth",accountEntity.getDayOfBirth());
+        ae.put("address",accountEntity.getAddress());
+        ae.put("aboutMe",accountEntity.getAboutMe());
+        ae.put("linkFb",accountEntity.getLinkFb());
+        ae.put("role",accountEntity.getRole().getRoleName());
+        ae.put("course", accountEntity.getCourse().getCourseName());
+        ae.put("major",accountEntity.getMajor().getMajorName());
+        ae.put("active",accountEntity.getActive());
+        ae.put("studentId",accountEntity.getStudentId());
+        return new ResponseEntity(ae,HttpStatus.OK);
     }
 
     @GetMapping("name/{search}")
@@ -47,7 +62,7 @@ public class AccountController {
         return ar.findByNameContaining(search);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public List<AccountEntity> findAllAccount()
     {
