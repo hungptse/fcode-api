@@ -13,6 +13,7 @@ public class CourseEntity {
 
     @Id
     @Column(name = "CourseId")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getCourseId() {
         return courseId;
     }
