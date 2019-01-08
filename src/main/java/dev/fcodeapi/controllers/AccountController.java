@@ -93,7 +93,7 @@ public class AccountController {
     public ResponseEntity updateAccount(@PathVariable String id, @RequestBody Map<String, String> body)
     {
         if (ar.existsById(id)) {
-            AccountEntity ae = ar.getOne(id);
+            AccountEntity ae = ar.findByStudentId(id);
             ae.setEmail(body.get("email"));
             ae.setLinkFb(body.get("linkFb"));
             ae.setName(body.get("name"));
@@ -165,18 +165,16 @@ public class AccountController {
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
-//    @PutMapping("about/{id}")
-//    public ResponseEntity updateAboutMe(@PathVariable String id, @RequestBody Map<String, String> body)
-//    {
-//        if (ar.existsById(id)) {
-//            AccountEntity ae = ar.getOne(id);
-//            ae.setAboutMe(body.get("aboutMe"));
-//            ar.save(ae);
-//            return new ResponseEntity(HttpStatus.NO_CONTENT);
-//        }
-//        return new ResponseEntity(HttpStatus.BAD_REQUEST);
-//    }
-
-
+    @PutMapping("about/{id}")
+    public ResponseEntity updateAboutMe(@PathVariable String id, @RequestBody Map<String, String> body)
+    {
+        if (ar.existsById(id)) {
+            AccountEntity ae = ar.findByStudentId(id);
+            ae.setAboutMe(body.get("aboutMe"));
+            ar.save(ae);
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
 
 }
