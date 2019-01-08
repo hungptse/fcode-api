@@ -39,7 +39,6 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
         String username = request.getParameter("studentId");
         String password = request.getParameter("password");
-        System.out.println("StudentID " + username + " Password: " + password);
         return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(username,password));
     }
 
@@ -47,7 +46,6 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication auth) throws IOException, ServletException {
         Collection<? extends GrantedAuthority> authorityCollections = auth.getAuthorities();
         boolean authorized = authorityCollections.contains(new SimpleGrantedAuthority("ADMIN"));
-        System.out.println(authorized);
         TokenAuthencationService.addAuthentication(response,auth.getName(),authorized);
     }
 

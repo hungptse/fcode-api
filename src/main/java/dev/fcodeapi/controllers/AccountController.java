@@ -90,7 +90,7 @@ public class AccountController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity editAccount(@PathVariable String id, @RequestBody Map<String, String> body)
+    public ResponseEntity updateAccount(@PathVariable String id, @RequestBody Map<String, String> body)
     {
         if (ar.existsById(id)) {
             AccountEntity ae = ar.getOne(id);
