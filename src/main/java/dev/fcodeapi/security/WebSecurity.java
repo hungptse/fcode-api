@@ -34,7 +34,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.cors();
         http.csrf().disable().authorizeRequests()
                 // No need authentication.
-                .antMatchers("/").permitAll() //
+                .antMatchers("/").permitAll().antMatchers(HttpMethod.POST,"/account/signUp").permitAll() //
                 .antMatchers(HttpMethod.POST,"/login").permitAll() //
                 // Need authentication.
                 .anyRequest().authenticated()

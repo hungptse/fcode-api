@@ -19,9 +19,6 @@ public class TokenAuthencationService {
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String HEADER_STRING = "Authorization";
 
-    @Autowired
-    private static AccountRepository ar;
-
     public static void addAuthentication(HttpServletResponse res, String username, boolean isAdmin) {
         String token = JWT.create().withSubject(username).withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME)).withClaim("isAdmin", isAdmin).sign(Algorithm.HMAC512(SECRET.getBytes()));
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + token);

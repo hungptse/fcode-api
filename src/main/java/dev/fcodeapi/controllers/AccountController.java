@@ -64,9 +64,29 @@ public class AccountController {
 
 //    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
-    public List<AccountEntity> findAllAccount()
+    public ResponseEntity findAllAccount()
     {
-        return ar.findAll();
+        List<AccountEntity> listInDB = ar.findAll();
+        if (listInDB.isEmpty()) return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        List<Map<String,Object>> listAll = new ArrayList<>();
+        for (AccountEntity accountEntity :listInDB) {
+            Map<String,Object> ae = new HashMap<>();
+            ae.put("email",accountEntity.getEmail());
+            ae.put("name",accountEntity.getName());
+            ae.put("gender",accountEntity.isGender());
+            ae.put("phone",accountEntity.getPhone());
+            ae.put("dayOfBirth",accountEntity.getDayOfBirth());
+            ae.put("address",accountEntity.getAddress());
+            ae.put("aboutMe",accountEntity.getAboutMe());
+            ae.put("linkFb",accountEntity.getLinkFb());
+            ae.put("role",accountEntity.getRole().getRoleName());
+            ae.put("course", accountEntity.getCourse().getCourseName());
+            ae.put("major",accountEntity.getMajor().getMajorName());
+            ae.put("active",accountEntity.getActive());
+            ae.put("studentId",accountEntity.getStudentId());
+            listAll.add(ae);
+        }
+        return new ResponseEntity(listAll,HttpStatus.OK);
     }
 
     @PutMapping("{id}")
@@ -80,7 +100,7 @@ public class AccountController {
             ae.setPhone(Integer.parseInt(body.get("phone")));
             ae.setGender(Boolean.parseBoolean(body.get("gender")));
             ae.setAddress(body.get("address"));
-            ae.setAboutMe(body.get("aboutMe"));
+//            ae.setAboutMe(body.get("aboutMe"));
 //            ae.setDayOfBirth(body.get("dayOfBirth"));
             ar.save(ae);
             return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -144,6 +164,18 @@ public class AccountController {
         }
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
+
+//    @PutMapping("about/{id}")
+//    public ResponseEntity updateAboutMe(@PathVariable String id, @RequestBody Map<String, String> body)
+//    {
+//        if (ar.existsById(id)) {
+//            AccountEntity ae = ar.getOne(id);
+//            ae.setAboutMe(body.get("aboutMe"));
+//            ar.save(ae);
+//            return new ResponseEntity(HttpStatus.NO_CONTENT);
+//        }
+//        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+//    }
 
 
 
